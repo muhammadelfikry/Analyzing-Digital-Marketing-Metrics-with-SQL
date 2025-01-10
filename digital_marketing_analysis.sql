@@ -1,12 +1,6 @@
 -- Overall ROMI
 SELECT 
-  id,
-  c_date,
-  campaign_name,
-  category,
-  mark_spent,
-  revenue,
-  ROUND((revenue - mark_spent) / mark_spent * 100) AS ROMI
+  ROUND(((SUM(revenue) - SUM(mark_spent)) / SUM(mark_spent)) * 100, 2) AS overall_romi_percentage
 FROM
   `united-triode-446917-s6.marketing_data.marketing`
 
@@ -42,7 +36,7 @@ GROUP BY
 -- Average order value for this campaign
 SELECT
   campaign_name,
-  SUM(revenue) / SUM(orders) as aov
+  ROUND(SUM(revenue) / SUM(orders), 2) as aov
 FROM
   `united-triode-446917-s6.marketing_data.marketing`
 GROUP BY 
@@ -80,8 +74,8 @@ SELECT
   SUM(mark_spent) AS total_mark_spent,
   SUM(clicks) AS total_clicks,
   SUM(leads) AS total_leads,
-  (SUM(revenue) - SUM(mark_spent)) / SUM(mark_spent) * 100 AS ROI,
-  SUM(clicks) / SUM(leads) * 100 AS CTR,
+  ROUND((SUM(revenue) - SUM(mark_spent)) / SUM(mark_spent) * 100, 2) AS ROI,
+  ROUND(SUM(clicks) / SUM(leads) * 100, 2) AS CTR,
 FROM
   `united-triode-446917-s6.marketing_data.marketing`
 GROUP BY 
